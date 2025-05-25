@@ -2,6 +2,7 @@
   <div>
     <header>
       <nav>
+        <NuxtLink to="/dashboard">Dashboard</NuxtLink>
         <LogoutButton />
       </nav>
     </header>

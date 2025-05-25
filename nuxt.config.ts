@@ -6,4 +6,8 @@ export default defineNuxtConfig({
     '@pinia/nuxt',
     '@vueuse/nuxt',
   ],
+  routeRules: {
+    '/': { ssr: true },
+    '/**': { ssr: false },
+  },
 })

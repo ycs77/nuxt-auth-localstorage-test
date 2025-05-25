@@ -2,7 +2,13 @@
   <div>
     <header>
       <nav>
-        <NuxtLink to="/login">Login</NuxtLink>
+        <template v-if="auth.isAuthenticated">
+          <NuxtLink to="/dashboard">Dashboard</NuxtLink>
+          <LogoutButton />
+        </template>
+        <template v-else>
+          <NuxtLink to="/login">Login</NuxtLink>
+        </template>
       </nav>
     </header>
 
@@ -13,7 +19,5 @@
 </template>
 
 <script setup lang="ts">
-definePageMeta({
-  middleware: 'guest',
-})
+const auth = useAuthStore()
 </script>
