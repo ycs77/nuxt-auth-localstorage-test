@@ -18,6 +18,8 @@
 </template>
 
 <script setup lang="ts">
+import { FetchError } from 'ofetch'
+
 definePageMeta({
   middleware: 'guest',
 })
@@ -36,24 +38,28 @@ const errors = shallowRef<Record<string, string[]>>({})
 async function onSubmit() {
   errors.value = {}
 
-  const res = await fetch('/api/login', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(form),
-  })
-
-  if (res.ok) {
-    const data = await res.json()
-    const { token } = data
+  try {
+    const { token } = await $fetch('/api/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(form),
+    })
 
     auth.login(token)
 
     router.push('/dashboard')
-  } else if (res.status === 422 || res.status === 500) {
-    const data = await res.json()
-    errors.value = data.errors || {}
+  } catch (error) {
+    if (error instanceof FetchError) {
+      if (error.status === 422) {
+        errors.value = error.data.data.errors || {}
+      } else {
+        console.error('An unexpected error occurred:', error)
+      }
+    } else {
+      console.error('An unexpected error occurred:', error)
+    }
   }
 }
 </script>

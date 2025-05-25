@@ -4,8 +4,10 @@ export default defineEventHandler(async event => {
   const token = event.headers.get('Authorization')?.replace('Bearer ', '')
 
   if (token !== TOKEN) {
-    setResponseStatus(event, 401, 'Unauthorized')
-    return
+    throw createError({
+      statusCode: 401,
+      message: 'Unauthorized',
+    })
   }
 
   return {

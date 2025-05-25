@@ -4,12 +4,16 @@ export default defineEventHandler(async event => {
   const body = await readBody(event)
   const { email, password } = body
 
-  if (email === 'astro123@example.com' && password === 'password') {
-    const token = TOKEN
-
-    return { token }
-  } else {
-    setResponseStatus(event, 422)
-    return { errors: { email: ['Incorrect credentials'] } }
+  if (email !== 'astro123@example.com' || password !== 'password') {
+    throw createError({
+      statusCode: 422,
+      data: {
+        errors: { email: ['Incorrect credentials'] },
+      },
+    })
   }
+
+  const token = TOKEN
+
+  return { token }
 })

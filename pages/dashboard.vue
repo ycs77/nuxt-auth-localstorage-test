@@ -16,6 +16,7 @@
 </template>
 
 <script setup lang="ts">
+import { FetchError } from 'ofetch'
 import type { User } from '~/types/user'
 
 definePageMeta({
@@ -32,18 +33,21 @@ onMounted(async () => {
   const token = auth.getToken()
   if (!token) return
 
-  const res = await fetch('/api/user', {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  })
-
-  if (res.ok) {
-    const data = await res.json()
+  try {
+    const data = await $fetch('/api/user', {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
     user.value = data.user
-  } else if (res.status === 401) {
-    auth.logout()
-    router.push('/login')
+  } catch (error) {
+    if (error instanceof FetchError && error.status === 401) {
+      auth.logout()
+
+      router.push('/login')
+    } else {
+      console.error('An unexpected error occurred:', error)
+    }
   }
 })
 </script>
