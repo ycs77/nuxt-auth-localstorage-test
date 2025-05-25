@@ -23,8 +23,6 @@ definePageMeta({
   middleware: 'auth',
 })
 
-const router = useRouter()
-
 const auth = useAuthStore()
 
 const user = ref<User | null>(null)
@@ -44,7 +42,7 @@ onMounted(async () => {
     if (error instanceof FetchError && error.status === 401) {
       auth.logout()
 
-      router.push('/login')
+      navigateTo('/login')
     } else {
       console.error('An unexpected error occurred:', error)
     }

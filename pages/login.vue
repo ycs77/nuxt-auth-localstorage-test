@@ -24,8 +24,6 @@ definePageMeta({
   middleware: 'guest',
 })
 
-const router = useRouter()
-
 const auth = useAuthStore()
 
 const form = reactive({
@@ -36,8 +34,6 @@ const form = reactive({
 const errors = shallowRef<Record<string, string[]>>({})
 
 async function onSubmit() {
-  errors.value = {}
-
   try {
     const { token } = await $fetch('/api/login', {
       method: 'POST',
@@ -49,7 +45,7 @@ async function onSubmit() {
 
     auth.login(token)
 
-    router.push('/dashboard')
+    navigateTo('/dashboard')
   } catch (error) {
     if (error instanceof FetchError) {
       if (error.status === 422) {
