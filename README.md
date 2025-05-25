@@ -1,4 +1,4 @@
-# Nuxt Auth Test
+# Nuxt Auth save token into localStorage test
 
 Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
 
