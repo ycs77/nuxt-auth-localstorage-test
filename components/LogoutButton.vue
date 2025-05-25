@@ -1,16 +1,9 @@
 <template>
-  <button type="button" @click="handleLogout">
+  <button type="button" @click="logout">
     Logout
   </button>
 </template>
 
 <script setup lang="ts">
-const router = useRouter()
-
-const auth = useAuthStore()
-
-function handleLogout() {
-  auth.logout()
-  router.push('/')
-}
+const { logout } = useLogout()
 </script>
